@@ -20,6 +20,7 @@ class App extends React.Component {
     const removeTask = id => {
       this.state.tasks.splice(id,1);
       this.socket.emit('removeTask', id);
+      console.log('działa');
       // this.setState({
 
       // })
@@ -39,7 +40,7 @@ class App extends React.Component {
               .map(item => (
                 <li key={item} className="task">{item}<button onClick={event => {
                   event.preventDefault();
-                  return removeTask(item.id);
+                  return removeTask(item);
                 }} className="btn btn--red">Remove</button></li>
               ))}
             {/* <li class="task">Shopping <button class="btn btn--red">Remove</button></li>
