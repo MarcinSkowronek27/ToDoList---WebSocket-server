@@ -20,36 +20,41 @@ class App extends React.Component {
     console.log('początkowy stan:', this.state.tasks);
     const removeTask = id => {
       console.log('kliknięte id:', id);
-      let test = this.state.tasks.filter(item => item !== id);
-      console.log('wynik testu:', test);
+      let filteredArray = this.state.tasks.filter(item => item !== id);
+      console.log('wynik testu:', filteredArray);
       // console.log('usuwany element:', this.state.tasks.splice(this.state.tasks.indexOf(id, 1)));
+
       this.setState({
-        tasks: test,
-      }, () => { console.log('wartość tablicy OK:', this.state.tasks)});
-      //  () => { console.log('wartość tablicy:', this.state.tasks); return this.state.tasks});
+        tasks: filteredArray,
+      }, () => { console.log('wartość tablicy OK:', this.state.tasks) });
+
       // this.socket.emit('removeTask', id);
       // console.log('działa Remove');
       // console.log('wartość tablicy:', this.state.tasks);
-      // return this.state.tasks;
+      // return filteredArray;
     }
 
-    const addTask = task => {
-      this.state.tasks.push(task);
-      console.log('pushTask:', this.state.tasks);
-    };
 
-
-    const updateState = () => {
+    const updateName = () => {
       const inputValue = document.getElementsByClassName("text-input")[0].value;
       console.log('inputValue', inputValue);
       this.setState({
         taskName: inputValue,
-      });
+      }, () => { console.log('wartość tablicy po update:', this.state.tasks) });
+    };
+
+    const addTask = task => {
+      this.state.tasks.push(task);
+      // this.setState({
+      //   tasks: newElem,
+      // }, () => { console.log('wartość wypushowanej tablicy:', this.state.tasks)});
+      console.log('pushTask:', this.state.tasks);
     };
 
     const submitForm = (e) => {
       e.preventDefault();
       addTask(this.state.taskName);
+      updateName();
       // this.socket.emit('addTask', this.state.taskName);
       console.log('działa Add');
     };
@@ -78,9 +83,9 @@ class App extends React.Component {
             <li class="task">Go out with a dog <button class="btn btn--red">Remove</button></li> */}
           </ul>
 
-          <form id="add-task-form">
-            <input className="text-input" autoComplete="off" type="text" onChange={updateState} placeholder="Type your description" id="task-name" value={this.state.taskName} />
-            <button className="btn" type="submit" onClick={submitForm}
+          <form id="add-task-form" onSubmit={submitForm}>
+            <input className="text-input" autoComplete="off" type="text" onChange={updateName} placeholder="Type your description" id="task-name" value={this.state.taskName} />
+            <button className="btn" type="submit"
             >Add</button>
           </form>
 
