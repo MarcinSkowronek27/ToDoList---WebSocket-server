@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import io from 'socket.io-client';
 
+const socket = io.connect('http://localhost:8000');
+
 class App extends React.Component {
 
   state = {
@@ -9,8 +11,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.socket = io();
-    this.socket.connect("http://localhost:8000");
+    socket.open();
   }
 
 
@@ -18,7 +19,7 @@ class App extends React.Component {
     // const tasks = [];
 
     const removeTask = id => {
-      this.state.tasks.splice(id,1);
+      this.state.tasks.splice(id, 1);
       this.socket.emit('removeTask', id);
       console.log('działa');
       // this.setState({
