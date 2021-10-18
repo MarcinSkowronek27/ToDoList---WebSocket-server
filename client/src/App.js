@@ -1,31 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 
-const socket = io.connect('http://localhost:8000');
 
 class App extends React.Component {
 
   state = {
-    tasks: ['Buy some food', 'Make a dinner']
+    tasks: ['Buy some food', 'Make a dinner', 'Bake a cake', 'Make a money'],
+    taskName: []
   }
 
-  componentDidMount() {
-    socket.open();
-  }
+  // componentDidMount() {
+  //   this.socket = io('http://localhost:8000');
+  // }
 
 
   render() {
     // const tasks = [];
-
+    console.log('początkowy stan:', this.state.tasks);
     const removeTask = id => {
-      this.state.tasks.splice(id, 1);
-      this.socket.emit('removeTask', id);
-      console.log('działa');
-      // this.setState({
-
-      // })
+      console.log('kliknięte id:', id);
+      let test = this.state.tasks.filter(item => item !== id);
+      console.log('wynik testu:', test);
+      // console.log('usuwany element:', this.state.tasks.splice(this.state.tasks.indexOf(id, 1)));
+      this.setState({
+        tasks: test,
+      }, () => { console.log('wartość tablicy OK:', this.state.tasks)});
+      //  () => { console.log('wartość tablicy:', this.state.tasks); return this.state.tasks});
+      // this.socket.emit('removeTask', id);
+      // console.log('działa Remove');
+      // console.log('wartość tablicy:', this.state.tasks);
+      // return this.state.tasks;
     }
+
+    const addTask = task => {
+      this.state.tasks.push(task);
+      console.log('pushTask:', this.state.tasks);
+    };
+
+
+    const updateState = () => {
+      const inputValue = document.getElementsByClassName("text-input")[0].value;
+      console.log('inputValue', inputValue);
+      this.setState({
+        taskName: inputValue,
+      });
+    };
+
+    const submitForm = (e) => {
+      e.preventDefault();
+      addTask(this.state.taskName);
+      // this.socket.emit('addTask', this.state.taskName);
+      console.log('działa Add');
+    };
+
+
+
     return (
       <div className="App">
 
@@ -49,8 +79,9 @@ class App extends React.Component {
           </ul>
 
           <form id="add-task-form">
-            <input className="text-input" autoComplete="off" type="text" placeholder="Type your description" id="task-name" />
-            <button className="btn" type="submit">Add</button>
+            <input className="text-input" autoComplete="off" type="text" onChange={updateState} placeholder="Type your description" id="task-name" value={this.state.taskName} />
+            <button className="btn" type="submit" onClick={submitForm}
+            >Add</button>
           </form>
 
         </section>

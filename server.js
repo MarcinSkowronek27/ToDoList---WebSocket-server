@@ -9,9 +9,9 @@ const io = socket(server);
 
 const tasks = [];
 
-app.use((req, res) => {
-  res.status(404).send({ message: 'Not found...' });
-});
+// app.use((req, res) => {
+//   res.status(404).send({ message: 'Not found...' });
+// });
 
 io.on('connection', (socket) => {
   socket.emit('updateData', tasks);
