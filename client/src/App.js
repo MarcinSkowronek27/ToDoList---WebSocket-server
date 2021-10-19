@@ -3,16 +3,28 @@ import PropTypes from 'prop-types';
 import io from 'socket.io-client';
 
 
+
 class App extends React.Component {
+
 
   state = {
     tasks: ['Buy some food', 'Make a dinner', 'Bake a cake', 'Make a money'],
-    taskName: []
+    taskName: ''
   }
 
   componentDidMount() {
     this.socket = io('http://localhost:8000');
+    this.socket.on('addTask', (task) => this.addTask(task));
+    this.socket.on('removeTask', (id) => this.removeTask(id));
+    this.socket.on('updateData', (tasks) => this.updateTasks(tasks));
   };
+
+  updateTasks = (tasks) => {
+    this.state.tasks.push(tasks);
+    // this.setState({
+    //   tasks: tasks,
+    // })
+  }
 
   updateName = (event) => {
     // const inputValue = document.getElementsByClassName("text-input")[0].value;
@@ -35,29 +47,32 @@ class App extends React.Component {
     e.preventDefault();
     this.addTask(this.state.taskName);
     this.updateName(e);
-    // this.socket.emit('addTask', this.state.taskName);
-    console.log('działa Add');
+    this.socket.emit('addTask', this.state.taskName);
+    // console.log('działa Add');
   };
+
+  // const tasks = [];
+
+  removeTask = (id, location) => {
+    // console.log('kliknięte id:', id);
+    let filteredArray = this.state.tasks.filter(item => item !== id);
+    // console.log('wynik testu:', filteredArray);
+    // console.log('usuwany element:', this.state.tasks.splice(this.state.tasks.indexOf(id, 1)));
+
+    this.setState({
+      tasks: filteredArray,
+    }, () => { console.log('wartość tablicy OK:', this.state.tasks) });
+    if (location === 'local') {
+      this.socket.emit('removeTask', id);
+      console.log('działa lokalnie');
+    }
+    // console.log('działa Remove');
+    // console.log('wartość tablicy:', this.state.tasks);
+    // return filteredArray;
+  }
 
 
   render() {
-    // const tasks = [];
-    console.log('początkowy stan:', this.state.tasks);
-    const removeTask = id => {
-      console.log('kliknięte id:', id);
-      let filteredArray = this.state.tasks.filter(item => item !== id);
-      console.log('wynik testu:', filteredArray);
-      // console.log('usuwany element:', this.state.tasks.splice(this.state.tasks.indexOf(id, 1)));
-
-      this.setState({
-        tasks: filteredArray,
-      }, () => { console.log('wartość tablicy OK:', this.state.tasks) });
-
-      // this.socket.emit('removeTask', id);
-      // console.log('działa Remove');
-      // console.log('wartość tablicy:', this.state.tasks);
-      // return filteredArray;
-    }
 
     return (
       <div className="App">
@@ -74,7 +89,7 @@ class App extends React.Component {
               .map(item => (
                 <li key={item} className="task">{item}<button onClick={event => {
                   event.preventDefault();
-                  return removeTask(item);
+                  return this.removeTask(item, 'local');
                 }} className="btn btn--red">Remove</button></li>
               ))}
             {/* <li class="task">Shopping <button class="btn btn--red">Remove</button></li>
