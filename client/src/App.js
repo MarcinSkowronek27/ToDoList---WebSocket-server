@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import io from 'socket.io-client';
+import io from 'socket.io-client';
 
 
 class App extends React.Component {
@@ -10,9 +10,34 @@ class App extends React.Component {
     taskName: []
   }
 
-  // componentDidMount() {
-  //   this.socket = io('http://localhost:8000');
-  // }
+  componentDidMount() {
+    this.socket = io('http://localhost:8000');
+  };
+
+  updateName(event) {
+    // const inputValue = document.getElementsByClassName("text-input")[0].value;
+    // console.log('inputValue', inputValue);
+    // console.log('event:', event.target.value);
+    this.setState({
+      taskName: event.target.value,
+    }, () => { console.log('wartość tablicy po update:', this.state.tasks) });
+  };
+
+  addTask(task) {
+    this.state.tasks.push(task);
+    // this.setState({
+    //   tasks: newElem,
+    // }, () => { console.log('wartość wypushowanej tablicy:', this.state.tasks)});
+    console.log('pushTask:', this.state.tasks);
+  };
+
+  submitForm(e) {
+    e.preventDefault();
+    this.addTask(this.state.taskName);
+    this.updateName(e);
+    // this.socket.emit('addTask', this.state.taskName);
+    console.log('działa Add');
+  };
 
 
   render() {
@@ -33,33 +58,6 @@ class App extends React.Component {
       // console.log('wartość tablicy:', this.state.tasks);
       // return filteredArray;
     }
-
-
-    const updateName = () => {
-      const inputValue = document.getElementsByClassName("text-input")[0].value;
-      console.log('inputValue', inputValue);
-      this.setState({
-        taskName: inputValue,
-      }, () => { console.log('wartość tablicy po update:', this.state.tasks) });
-    };
-
-    const addTask = task => {
-      this.state.tasks.push(task);
-      // this.setState({
-      //   tasks: newElem,
-      // }, () => { console.log('wartość wypushowanej tablicy:', this.state.tasks)});
-      console.log('pushTask:', this.state.tasks);
-    };
-
-    const submitForm = (e) => {
-      e.preventDefault();
-      addTask(this.state.taskName);
-      updateName();
-      // this.socket.emit('addTask', this.state.taskName);
-      console.log('działa Add');
-    };
-
-
 
     return (
       <div className="App">
@@ -83,8 +81,8 @@ class App extends React.Component {
             <li class="task">Go out with a dog <button class="btn btn--red">Remove</button></li> */}
           </ul>
 
-          <form id="add-task-form" onSubmit={submitForm}>
-            <input className="text-input" autoComplete="off" type="text" onChange={updateName} placeholder="Type your description" id="task-name" value={this.state.taskName} />
+          <form id="add-task-form" onSubmit={this.submitForm}>
+            <input className="text-input" autoComplete="off" type="text" onChange={this.updateName} placeholder="Type your description" id="task-name" value={this.state.taskName} />
             <button className="btn" type="submit"
             >Add</button>
           </form>
