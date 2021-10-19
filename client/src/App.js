@@ -14,7 +14,7 @@ class App extends React.Component {
     this.socket = io('http://localhost:8000');
   };
 
-  updateName(event) {
+  updateName = (event) => {
     // const inputValue = document.getElementsByClassName("text-input")[0].value;
     // console.log('inputValue', inputValue);
     // console.log('event:', event.target.value);
@@ -23,7 +23,7 @@ class App extends React.Component {
     }, () => { console.log('wartość tablicy po update:', this.state.tasks) });
   };
 
-  addTask(task) {
+  addTask = (task) => {
     this.state.tasks.push(task);
     // this.setState({
     //   tasks: newElem,
@@ -31,7 +31,7 @@ class App extends React.Component {
     console.log('pushTask:', this.state.tasks);
   };
 
-  submitForm(e) {
+  submitForm = (e) => {
     e.preventDefault();
     this.addTask(this.state.taskName);
     this.updateName(e);
