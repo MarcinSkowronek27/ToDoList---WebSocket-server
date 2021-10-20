@@ -35,10 +35,10 @@ class App extends React.Component {
   };
 
   addTask = (task) => {
-    this.state.tasks.push(task);
-    // this.setState({
-    //   tasks: test,
-    // }, () => { console.log('wartość wypushowanej tablicy:', this.state.tasks)});
+    // this.state.tasks.push(task); nie można aktualizować w ten sposób, ponieważ push próbuje zmienić bezpośrednio stan TIPS
+    this.setState({
+      tasks: [...this.state.tasks, task],
+    }, () => { console.log('wartość wypushowanej tablicy:', this.state.tasks)});
     console.log('pushTask:', this.state.tasks);
   };
 
