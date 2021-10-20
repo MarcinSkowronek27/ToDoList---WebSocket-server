@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import io from 'socket.io-client';
 
 
-
 class App extends React.Component {
 
 
@@ -14,16 +13,16 @@ class App extends React.Component {
 
   componentDidMount() {
     this.socket = io('http://localhost:8000');
+    this.socket.on('updateData', (tasks) => this.updateTasks(tasks));
     this.socket.on('addTask', (task) => this.addTask(task));
     this.socket.on('removeTask', (id) => this.removeTask(id));
-    this.socket.on('updateData', (tasks) => this.updateTasks(tasks));
   };
 
   updateTasks = (tasks) => {
-    this.state.tasks.push(tasks);
-    // this.setState({
-    //   tasks: tasks,
-    // })
+    // this.state.tasks.push(tasks);
+    this.setState({
+      tasks: tasks,
+    })
   }
 
   updateName = (event) => {
@@ -38,15 +37,15 @@ class App extends React.Component {
   addTask = (task) => {
     this.state.tasks.push(task);
     // this.setState({
-    //   tasks: newElem,
+    //   tasks: test,
     // }, () => { console.log('wartość wypushowanej tablicy:', this.state.tasks)});
     console.log('pushTask:', this.state.tasks);
   };
 
   submitForm = (e) => {
     e.preventDefault();
-    this.addTask(this.state.taskName);
     this.updateName(e);
+    this.addTask(this.state.taskName);
     this.socket.emit('addTask', this.state.taskName);
     // console.log('działa Add');
   };
