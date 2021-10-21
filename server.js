@@ -21,8 +21,12 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('addTask', taskName);
   });
   socket.on('removeTask', (removeId) => {
-    tasks.splice(tasks.indexOf(removeId, 1));
-    // console.log('tasks:', tasks);
+    tasks.splice(tasks.indexOf(removeId));
+    // let filteredArray = tasks.filter(item => item.id !== removeId);
+    // console.log('filteredArray:', filteredArray);
+    // setState({
+    //   tasks: filteredArray,
+    // }),
     // console.log('to kasuje:', test);
     socket.broadcast.emit('removeTask', removeId);
   });
