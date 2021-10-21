@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@marcin_lark30/randomid-generator": "^1.0.3",
     "express": "4.17.1",
     "socket.io": "2.2.0"
   },

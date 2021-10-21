@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import io from 'socket.io-client';
+const randomID = require('@marcin_lark30/randomid-generator');
 
 
 class App extends React.Component {
 
 
   state = {
-    tasks: ['Buy some food', 'Make a dinner', 'Bake a cake', 'Make a money'],
+    tasks: [{id: 'rt4s', name: 'Buy some food'}, {id: 'of3a', name: 'Make a dinner'}, {id: '5tvc', name: 'Bake a cake'}],
     taskName: ''
   }
 
@@ -35,18 +36,19 @@ class App extends React.Component {
   };
 
   addTask = (task) => {
-    // this.state.tasks.push(task); nie można aktualizować w ten sposób, ponieważ push próbuje zmienić bezpośrednio stan TIPS
+    // this.state.tasks.push(task); nie można aktualizować w ten sposób, ponieważ push próbuje zmienić bezpośrednio stan/ TIPS
     this.setState({
       tasks: [...this.state.tasks, task],
-    }, () => { console.log('wartość wypushowanej tablicy:', this.state.tasks)});
+    }, () => { console.log('wartość wypushowanej tablicy:', this.state.tasks) });
     console.log('pushTask:', this.state.tasks);
   };
 
   submitForm = (e) => {
     e.preventDefault();
     this.updateName(e);
-    this.addTask(this.state.taskName);
-    this.socket.emit('addTask', this.state.taskName);
+    let id = randomID(4);
+    this.addTask({id: id, name: this.state.taskName});
+    this.socket.emit('addTask', {id: id, name: this.state.taskName});
     // console.log('działa Add');
   };
 
@@ -54,8 +56,8 @@ class App extends React.Component {
 
   removeTask = (id, location) => {
     // console.log('kliknięte id:', id);
-    let filteredArray = this.state.tasks.filter(item => item !== id);
-    // console.log('wynik testu:', filteredArray);
+    let filteredArray = this.state.tasks.filter(item => item.id !== id);
+    console.log('wynik testu:', filteredArray);
     // console.log('usuwany element:', this.state.tasks.splice(this.state.tasks.indexOf(id, 1)));
 
     this.setState({
@@ -82,13 +84,12 @@ class App extends React.Component {
 
         <section className="tasks-section" id="tasks-section">
           <h2>Tasks</h2>
-
           <ul className="tasks-section__list" id="tasks-list">
             {this.state.tasks
               .map(item => (
-                <li key={item} className="task">{item}<button onClick={event => {
+                <li key={item.id} className="task">{item.name}<button onClick={event => {
                   event.preventDefault();
-                  return this.removeTask(item, 'local');
+                  return this.removeTask(item.id, 'local');
                 }} className="btn btn--red">Remove</button></li>
               ))}
             {/* <li class="task">Shopping <button class="btn btn--red">Remove</button></li>

@@ -1,0 +1,17 @@
+{
+  "name": "@marcin_lark30/randomid-generator",
+  "version": "1.0.3",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "Marcin Skowronek",
+  "contributors": [
+    "Kodilla mentor"
+  ],
+  "keywords": [
+    "random",
+    "id",
+    "randomId",
+    "randomString",
+    "randomArray"
+  ]
+}
