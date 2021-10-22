@@ -8,7 +8,7 @@ class App extends React.Component {
 
 
   state = {
-    tasks: [{id: 'rt4s', name: 'Buy some food'}, {id: 'of3a', name: 'Make a dinner'}, {id: '5tvc', name: 'Bake a cake'}],
+    tasks: [],
     taskName: ''
   }
 

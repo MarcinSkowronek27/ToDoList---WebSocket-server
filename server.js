@@ -8,7 +8,7 @@ const server = app.listen(process.env.PORT || 8000, () => {
 const io = socket(server);
 
 const tasks = [];
-
+// elementy do tablicy do testów {id: 'rt4s', name: 'Buy some food'}, {id: 'of3a', name: 'Make a dinner'}, {id: '5tvc', name: 'Bake a cake'}
 // app.use((req, res) => {
 //   res.status(404).send({ message: 'Not found...' });
 // });
